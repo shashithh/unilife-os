@@ -51,13 +51,21 @@ exports.rescheduleMissedTasks = async () => {
         });
 
         for (let task of missedTasks) {
-            task.deadline = new Date(today.getTime() + 2 * 24 * 60 * 60 * 1000);
+            // mark original missed
             task.status = "Missed";
             await task.save();
+
+            // create new rescheduled copy
+            await Task.create({
+                title: task.title + " (Rescheduled)",
+                deadline: new Date(today.getTime() + 3 * 24 * 60 * 60 * 1000),
+                priority: task.priority,
+                estimatedHours: task.estimatedHours,
+                scheduledDate: new Date() // today
+            });
         }
 
         return missedTasks.length;
-
     } catch {
         return 0;
     }
