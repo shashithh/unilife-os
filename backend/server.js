@@ -4,9 +4,9 @@ require("dotenv").config();
 
 const connectDB = require("./config/db");
 
-const moodRoutes = require("./routes/moodRoutes");/*
+const moodRoutes = require("./routes/moodRoutes");
 const supportRoutes = require("./routes/supportRoutes");
-const counselorRoutes = require("./routes/counselorRoutes");
+const counselorRoutes = require("./routes/counselorRoutes");/*
 const bookingRoutes = require("./routes/bookingRoutes");
 const aiRoutes = require("./routes/aiRoutes");
 */
@@ -19,9 +19,9 @@ app.use(express.json());
 // Routes
 app.get("/", (req, res) => res.send("✅ Wellbeing Hub API Running"));
 app.use("/api/moods", moodRoutes);
-/*
+
 app.use("/api/support", supportRoutes);
-app.use("/api/counselors", counselorRoutes);
+app.use("/api/counselors", counselorRoutes);/*
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/ai", aiRoutes);
 */
