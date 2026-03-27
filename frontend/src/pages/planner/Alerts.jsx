@@ -39,9 +39,7 @@ export function Alerts() {
                 score.
               </p>
             </div>
-            <Button variant="danger" size="sm">
-              Reschedule
-            </Button>
+
           </div>
         </Card>
 
@@ -60,9 +58,7 @@ export function Alerts() {
                 Due tomorrow at 11:59 PM. You have 3 estimated hours remaining.
               </p>
             </div>
-            <Button variant="secondary" size="sm">
-              Mark Done
-            </Button>
+
           </div>
         </Card>
 
@@ -81,9 +77,7 @@ export function Alerts() {
                 AI has successfully generated your study plan for next week.
               </p>
             </div>
-            <Button variant="secondary" size="sm">
-              View Plan
-            </Button>
+
           </div>
         </Card>
       </div>

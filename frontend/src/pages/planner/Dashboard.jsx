@@ -7,8 +7,9 @@ import { PlannerNav } from '../../components/planner/PlannerNav';
 import {
   tasks,
   productivityStats,
-  aiRecommendations } from
-'../../data/mockData';
+  aiRecommendations
+} from
+  '../../data/mockData';
 import {
   Plus,
   BrainCircuit,
@@ -16,8 +17,9 @@ import {
   AlertOctagon,
   CheckCircle2,
   Calendar as CalendarIcon,
-  Sparkles } from
-'lucide-react';
+  Sparkles
+} from
+  'lucide-react';
 export function Dashboard() {
   const navigate = useNavigate();
   const pendingTasks = tasks.filter((t) => t.status !== 'Completed');
@@ -40,14 +42,14 @@ export function Dashboard() {
             variant="secondary"
             icon={<Plus className="w-4 h-4" />}
             onClick={() => navigate('/add-subject')}>
-            
+
             Subject
           </Button>
           <Button
             variant="primary"
             icon={<Plus className="w-4 h-4" />}
             onClick={() => navigate('/add-task')}>
-            
+
             Add Task
           </Button>
         </div>
@@ -131,16 +133,10 @@ export function Dashboard() {
                   variant="primary"
                   className="bg-white text-indigo-900 hover:bg-indigo-50"
                   onClick={() => navigate('/ai-scheduler')}>
-                  
+
                   Generate Weekly Plan
                 </Button>
-                <Button
-                  variant="glass"
-                  className="text-white border-white/30 hover:bg-white/10"
-                  onClick={() => navigate('/ai-scheduler')}>
-                  
-                  Auto-Reschedule Missed
-                </Button>
+
               </div>
             </div>
           </Card>
@@ -155,13 +151,13 @@ export function Dashboard() {
                 variant="ghost"
                 size="sm"
                 onClick={() => navigate('/tasks')}>
-                
+
                 View All
               </Button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {pendingTasks.slice(0, 4).map((task) =>
-              <TaskCard key={task.id} task={task} />
+                <TaskCard key={task.id} task={task} />
               )}
             </div>
           </div>
@@ -178,7 +174,7 @@ export function Dashboard() {
                 size="sm"
                 icon={<CalendarIcon className="w-4 h-4" />}
                 onClick={() => navigate('/calendar')} />
-              
+
             </div>
             <div className="space-y-4">
               <div className="p-3 rounded-xl bg-blue-50 border border-blue-100 flex gap-3">
@@ -219,13 +215,13 @@ export function Dashboard() {
             </h2>
             <div className="space-y-3">
               {aiRecommendations.map((rec) =>
-              <div
-                key={rec.id}
-                className="flex gap-3 items-start p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer">
-                
+                <div
+                  key={rec.id}
+                  className="flex gap-3 items-start p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer">
+
                   <div
-                  className={`p-2 rounded-lg ${rec.type === 'risk' ? 'bg-red-100 text-red-600' : 'bg-orange-100 text-orange-600'}`}>
-                  
+                    className={`p-2 rounded-lg ${rec.type === 'risk' ? 'bg-red-100 text-red-600' : 'bg-orange-100 text-orange-600'}`}>
+
                     <AlertOctagon className="w-4 h-4" />
                   </div>
                   <div>

@@ -17,9 +17,9 @@ export function Calendar() {
   });
 
   const [events, setEvents] = useState([
-    { day: 15, title: 'CS101 Project Due', color: 'bg-red-100 text-red-700 border-red-200' },
+    { day: 15, title: 'IT3040 Project Due', color: 'bg-red-100 text-red-700 border-red-200' },
     { day: 24, title: 'Study: Calculus', color: 'bg-purple-100 text-purple-700 border-purple-200' },
-    { day: 28, title: 'Essay Draft', color: 'bg-orange-100 text-orange-700 border-orange-200' }
+    { day: 28, title: 'NDM Lab Exam', color: 'bg-orange-100 text-orange-700 border-orange-200' }
   ]);
 
   const [errors, setErrors] = useState({});

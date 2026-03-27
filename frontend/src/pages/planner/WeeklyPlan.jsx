@@ -20,7 +20,7 @@ export function WeeklyPlan() {
     Monday: [
       {
         time: '09:00 AM',
-        task: 'CS101 Lecture',
+        task: 'IT3040 IT Project Management Lecture',
         type: 'class',
         color: 'bg-blue-100 text-blue-700 border-blue-200'
       },
@@ -29,55 +29,55 @@ export function WeeklyPlan() {
         task: 'Data Structures Assignment',
         type: 'study',
         color: 'bg-blue-500 text-white border-blue-600',
-        ai: true
+
       }
     ],
 
     Tuesday: [
       {
         time: '10:00 AM',
-        task: 'MATH201 Lecture',
+        task: 'IT3040 IT Project Management Tutorial',
         type: 'class',
         color: 'bg-purple-100 text-purple-700 border-purple-200'
       },
       {
         time: '03:00 PM',
-        task: 'Calculus Practice',
+        task: 'NDM Lab Exam',
         type: 'study',
         color: 'bg-purple-500 text-white border-purple-600',
-        ai: true
+
       }
     ],
 
     Wednesday: [
       {
         time: '11:00 AM',
-        task: 'PHY101 Lab',
+        task: 'IT3010 Data Structures and Algorithms Lecture',
         type: 'class',
         color: 'bg-teal-100 text-teal-700 border-teal-200'
       },
       {
         time: '04:00 PM',
-        task: 'Physics Lab Report',
+        task: 'PAF Lab Report',
         type: 'study',
         color: 'bg-teal-500 text-white border-teal-600',
-        ai: true
+
       }
     ],
 
     Thursday: [
       {
         time: '09:00 AM',
-        task: 'ENG101 Seminar',
+        task: 'IT3020 ESD Lecture',
         type: 'class',
         color: 'bg-orange-100 text-orange-700 border-orange-200'
       },
       {
         time: '01:00 PM',
-        task: 'Essay Draft Writing',
+        task: 'PAF Lab',
         type: 'study',
         color: 'bg-orange-500 text-white border-orange-600',
-        ai: true
+
       }
     ],
 
@@ -93,7 +93,7 @@ export function WeeklyPlan() {
         task: 'Weekly Review',
         type: 'study',
         color: 'bg-indigo-500 text-white border-indigo-600',
-        ai: true
+
       }
     ],
 
@@ -103,7 +103,7 @@ export function WeeklyPlan() {
         task: 'Deep Work: Calculus',
         type: 'study',
         color: 'bg-purple-500 text-white border-purple-600',
-        ai: true
+
       }
     ],
 
@@ -136,13 +136,7 @@ export function WeeklyPlan() {
 
       <PlannerNav />
 
-      <div className="mb-6 p-4 bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-100 rounded-xl flex items-center gap-3">
-        <Sparkles className="w-5 h-5 text-purple-600" />
-        <span className="text-sm text-gray-700">
-          <strong>AI Note:</strong> I've distributed your heavy Calculus
-          workload across Tuesday and Saturday to prevent burnout.
-        </span>
-      </div>
+
 
       <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
         {days.map((day) => (
