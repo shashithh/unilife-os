@@ -10,58 +10,59 @@ import {
   Bell,
   User,
   Settings,
-  Sparkles } from
-'lucide-react';
+  Sparkles
+} from
+  'lucide-react';
 export function Sidebar() {
   const navItems = [
-  {
-    icon: <LayoutDashboard size={20} />,
-    label: 'Dashboard',
-    path: '/dashboard'
-  },
-  {
-    icon: <CheckSquare size={20} />,
-    label: 'Academic Planner',
-    path: '/',
-    active: true
-  },
-  {
-    icon: <Users size={20} />,
-    label: 'Group Collaboration',
-    path: '/groups'
-  },
-  {
-    icon: <HeartPulse size={20} />,
-    label: 'Wellbeing Hub',
-    path: '/wellbeing'
-  },
-  {
-    icon: <Wallet size={20} />,
-    label: 'Budget Manager',
-    path: '/budget'
-  }];
+    {
+      icon: <LayoutDashboard size={20} />,
+      label: 'Dashboard',
+      path: '/dashboard'
+    },
+    {
+      icon: <CheckSquare size={20} />,
+      label: 'Academic Planner',
+      path: '/',
+      active: true
+    },
+    {
+      icon: <Users size={20} />,
+      label: 'Group Collaboration',
+      path: '/groups'
+    },
+    {
+      icon: <HeartPulse size={20} />,
+      label: 'Wellbeing Hub',
+      path: '/wellbeing'
+    },
+    {
+      icon: <Wallet size={20} />,
+      label: 'Budget Manager',
+      path: '/budget'
+    }];
 
   const bottomItems = [
-  {
-    icon: <CalendarIcon size={20} />,
-    label: 'Calendar',
-    path: '/calendar'
-  },
-  {
-    icon: <Bell size={20} />,
-    label: 'Notifications',
-    path: '/alerts'
-  },
-  {
-    icon: <User size={20} />,
-    label: 'Profile',
-    path: '/profile'
-  },
-  {
-    icon: <Settings size={20} />,
-    label: 'Settings',
-    path: '/settings'
-  }];
+    {
+      icon: <CalendarIcon size={20} />,
+      label: 'Calendar',
+      path: '/calendar'
+    },
+    {
+      icon: <Bell size={20} />,
+      label: 'Notifications',
+      path: '/alerts'
+    },
+    {
+      icon: <User size={20} />,
+      label: 'Profile',
+      path: '/profile'
+    },
+    {
+      icon: <Settings size={20} />,
+      label: 'Settings',
+      path: '/settings'
+    }];
 
   return (
     <aside className="w-64 h-screen bg-white/80 backdrop-blur-xl border-r border-gray-200 flex flex-col fixed left-0 top-0 z-20">
@@ -80,14 +81,14 @@ export function Sidebar() {
 
       <nav className="flex-1 px-3 space-y-1 overflow-y-auto">
         {navItems.map((item) =>
-        <NavLink
-          key={item.label}
-          to={item.path}
-          className={({ isActive }) => `
+          <NavLink
+            key={item.label}
+            to={item.path}
+            className={({ isActive }) => `
               flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200
               ${item.active || isActive ? 'bg-blue-50 text-blue-700 shadow-sm' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}
             `}>
-          
+
             <span className={item.active ? 'text-blue-600' : 'text-gray-400'}>
               {item.icon}
             </span>
@@ -100,14 +101,14 @@ export function Sidebar() {
         </div>
 
         {bottomItems.map((item) =>
-        <NavLink
-          key={item.label}
-          to={item.path}
-          className={({ isActive }) => `
+          <NavLink
+            key={item.label}
+            to={item.path}
+            className={({ isActive }) => `
               flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200
               ${isActive ? 'bg-blue-50 text-blue-700 shadow-sm' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}
             `}>
-          
+
             <span className="text-gray-400">{item.icon}</span>
             {item.label}
           </NavLink>
@@ -121,11 +122,11 @@ export function Sidebar() {
               src="https://i.pravatar.cc/150?img=32"
               alt="Student"
               className="w-full h-full object-cover" />
-            
+
           </div>
           <div>
-            <p className="text-sm font-bold text-gray-800">Alex Student</p>
-            <p className="text-xs text-gray-500">Computer Science</p>
+            <p className="text-sm font-bold text-gray-800">Mavindi Student</p>
+            <p className="text-xs text-gray-500">Information Technology</p>
           </div>
         </div>
       </div>
