@@ -5,12 +5,13 @@ import {
   Users,
   HeartPulse,
   Wallet,
-  Calendar as CalendarIcon,
+  CalendarDays,
   Bell,
   User,
   Settings,
   Sparkles,
-  X
+  X,
+  BookOpen,
 } from 'lucide-react';
 
 export function Sidebar({ isOpen, onClose }) {
@@ -19,6 +20,11 @@ export function Sidebar({ isOpen, onClose }) {
       icon: <LayoutDashboard size={20} />,
       label: 'Dashboard',
       path: '/'
+    },
+    {
+      icon: <BookOpen size={20} />,
+      label: 'Academic Planner',
+      path: '/tasks'
     },
     {
       icon: <Users size={20} />,
@@ -39,7 +45,7 @@ export function Sidebar({ isOpen, onClose }) {
 
   const bottomItems = [
     {
-      icon: <CalendarIcon size={20} />,
+      icon: <CalendarDays size={20} />,
       label: 'Calendar',
       path: '/calendar'
     },

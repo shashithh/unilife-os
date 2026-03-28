@@ -1,57 +1,34 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AppShell } from './components/layout/AppShell';
-// Pages
+import { Login } from './pages/auth/Login';
+import { Signup } from './pages/auth/Signup';
 import { Dashboard } from './pages/planner/Dashboard';
-import { TaskList } from './pages/planner/TaskList';
-import { AddTask } from './pages/planner/AddTask';
-import { AddSubject } from './pages/planner/AddSubject';
-import { AIScheduler } from './pages/planner/AIScheduler';
-import { WeeklyPlan } from './pages/planner/WeeklyPlan';
-import { Calendar } from './pages/planner/Calendar';
-import { Productivity } from './pages/planner/Productivity';
-import { Alerts } from './pages/planner/Alerts';
+import { Profile } from './pages/profile/Profile';
 import { GroupCollaboration } from './pages/groups/GroupCollaboration';
+
 export function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+
         <Route element={<AppShell />}>
-          {/* Planner Module Routes */}
           <Route path="/" element={<Dashboard />} />
-          <Route path="/tasks" element={<TaskList />} />
-          <Route path="/add-task" element={<AddTask />} />
-          <Route path="/add-subject" element={<AddSubject />} />
-          <Route path="/ai-scheduler" element={<AIScheduler />} />
-          <Route path="/weekly-plan" element={<WeeklyPlan />} />
-          <Route path="/calendar" element={<Calendar />} />
-          <Route path="/productivity" element={<Productivity />} />
-          <Route path="/alerts" element={<Alerts />} />
-
-          {/* Placeholders for other UniLife OS modules */}
+          <Route path="/calendar" element={<div className="p-8 text-center text-gray-500">Calendar (Coming Soon)</div>} />
+          <Route path="/tasks" element={<div className="p-8 text-center text-gray-500">Academic Planner (Coming Soon)</div>} />
           <Route path="/groups" element={<GroupCollaboration />} />
+          <Route path="/profile" element={<Profile />} />
 
-          <Route
-            path="/wellbeing"
-            element={
-              <div className="p-8 text-center text-gray-500">
-                Wellbeing Hub Module (Coming Soon)
-              </div>
-            } />
-
-          <Route
-            path="/budget"
-            element={
-              <div className="p-8 text-center text-gray-500">
-                Budget Manager Module (Coming Soon)
-              </div>
-            } />
-
+          <Route path="/wellbeing" element={<div className="p-8 text-center text-gray-500">Wellbeing Hub (Coming Soon)</div>} />
+          <Route path="/budget" element={<div className="p-8 text-center text-gray-500">Budget Manager (Coming Soon)</div>} />
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
-    </BrowserRouter>);
-
+    </BrowserRouter>
+  );
 }
+
 export default App;

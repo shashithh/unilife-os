@@ -1,21 +1,19 @@
 import React from 'react';
-import { Search, Bell, ChevronRight, Menu } from 'lucide-react';
-import { useLocation } from 'react-router-dom';
+import { Search, Bell, ChevronRight, Menu, UserPlus, LogOut } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 export function Navbar({ onMenuClick }) {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
 
   const getBreadcrumb = () => {
     const path = location.pathname;
     if (path === '/') return 'Dashboard';
-    if (path === '/tasks') return 'Task List';
-    if (path === '/add-task') return 'Add Task';
-    if (path === '/add-subject') return 'Add Subject';
-    if (path === '/ai-scheduler') return 'AI Study Scheduler';
-    if (path === '/weekly-plan') return 'Weekly Plan';
     if (path === '/calendar') return 'Calendar';
-    if (path === '/productivity') return 'Productivity Insights';
-    if (path === '/alerts') return 'Alerts & Reminders';
+    if (path === '/groups') return 'Group Collaboration';
+    if (path === '/alerts') return 'Notifications';
     return 'Dashboard';
   };
 
@@ -50,6 +48,24 @@ export function Navbar({ onMenuClick }) {
           <Bell className="w-5 h-5" />
           <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
         </button>
+
+        {user ? (
+          <button
+            onClick={() => { logout(); navigate('/'); }}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:shadow-md hover:scale-105 transition-all duration-200"
+          >
+            <LogOut className="w-4 h-4" />
+            Sign Out
+          </button>
+        ) : (
+          <button
+            onClick={() => navigate('/signup')}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:shadow-md hover:scale-105 transition-all duration-200"
+          >
+            <UserPlus className="w-4 h-4" />
+            Sign Up
+          </button>
+        )}
       </div>
     </header>
   );
