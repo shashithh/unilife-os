@@ -129,14 +129,14 @@ export function AIScheduler() {
                 <div className="grid grid-cols-2 gap-4 mt-6">
                   <div className="p-4 bg-gray-50 rounded-xl">
                     <p className="text-sm text-gray-500 mb-1">
-                      Tasks completed
+                      Completed Tasks
                     </p>
                     <p className="text-2xl font-bold text-gray-900">3</p>
                   </div>
 
                   <div className="p-4 bg-gray-50 rounded-xl">
                     <p className="text-sm text-gray-500 mb-1">
-                      Tasks Pending
+                      Pending Tasks
                     </p>
                     <p className="text-2xl font-bold text-gray-900">5</p>
                   </div>

@@ -152,4 +152,4 @@ export function AddSubject() {
       </Card>
     </div>
   );
-} 
+}

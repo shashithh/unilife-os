@@ -36,7 +36,7 @@ export const subjects = [
 export const tasks = [
   {
     id: 't1',
-    title: 'IT Project Management Lab Report',
+    title: 'Complete Data Structures Assignment',
     subjectId: 's1',
     deadline: new Date(
       new Date().setDate(new Date().getDate() + 2)
@@ -48,7 +48,7 @@ export const tasks = [
   },
   {
     id: 't2',
-    title: 'Network Design and Management Lab Report',
+    title: 'Study  Network Design and Management for  Midterm',
     subjectId: 's2',
     deadline: new Date(
       new Date().setDate(new Date().getDate() + 5)
@@ -72,7 +72,7 @@ export const tasks = [
   },
   {
     id: 't4',
-    title: 'Programming Applications and Frameworks Lab Report',
+    title: 'ITPM Project',
     subjectId: 's4',
     deadline: new Date(
       new Date().setDate(new Date().getDate() + 7)
@@ -84,7 +84,7 @@ export const tasks = [
   },
   {
     id: 't5',
-    title: 'IT Project Management Project',
+    title: 'PAF Assignment',
     subjectId: 's1',
     deadline: new Date(
       new Date().setDate(new Date().getDate() - 1)
@@ -96,7 +96,7 @@ export const tasks = [
   },
   {
     id: 't6',
-    title: 'NDM Lab Exam ',
+    title: 'NDM Lab Test',
     subjectId: 's2',
     deadline: new Date(
       new Date().setDate(new Date().getDate() - 2)
@@ -126,7 +126,7 @@ export const productivityStats = {
   subjectFocus: [
     { name: 'IT Project Management', value: 40, color: '#3B82F6' },
     { name: 'Network Design and Management', value: 30, color: '#8B5CF6' },
-    { name: 'Database Systems', value: 20, color: '#14B8A6' },
+    { name: 'Database System', value: 20, color: '#14B8A6' },
     { name: 'Programming Applications and Frameworks', value: 10, color: '#F97316' }]
 
 };
@@ -143,15 +143,15 @@ export const aiRecommendations = [
   {
     id: 'r2',
     type: 'focus',
-    title: 'Midterm Approaching',
+    title: 'Network Design and Management Midterm Approaching',
     description:
-      'Based on your past completion rate, allocate 2 extra hours to Math this weekend to ensure a safe readiness level.',
+      'Based on your past completion rate, allocate 2 extra hours to Network Design and Management this weekend to ensure a safe readiness level.',
     action: 'Add Study Block'
   },
   {
     id: 'r3',
     type: 'risk',
-    title: 'Critical Risk: IT Project Management Project',
+    title: 'Critical Risk: Data Structures',
     description:
       'This assignment usually takes 4 hours. You only have 2 hours of free time scheduled before the deadline.',
     action: 'Analyze Workload'

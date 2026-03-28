@@ -17,9 +17,9 @@ export function Calendar() {
   });
 
   const [events, setEvents] = useState([
-    { day: 15, title: 'IT3040 Project Due', color: 'bg-red-100 text-red-700 border-red-200' },
-    { day: 24, title: 'Study: Calculus', color: 'bg-purple-100 text-purple-700 border-purple-200' },
-    { day: 28, title: 'NDM Lab Exam', color: 'bg-orange-100 text-orange-700 border-orange-200' }
+    { day: 15, title: 'IT3040 ITPM Project Due', color: 'bg-red-100 text-red-700 border-red-200' },
+    { day: 24, title: 'Study: Mid Term', color: 'bg-purple-100 text-purple-700 border-purple-200' },
+    { day: 28, title: 'DS Lab Test', color: 'bg-orange-100 text-orange-700 border-orange-200' }
   ]);
 
   const [errors, setErrors] = useState({});
@@ -152,7 +152,7 @@ export function Calendar() {
 
       <Card className="flex-1 p-6 flex flex-col bg-white/80">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-800">March 2026</h2>
+          <h2 className="text-2xl font-bold text-gray-800">October 2026</h2>
           <div className="flex gap-2">
             <Button
               variant="secondary"

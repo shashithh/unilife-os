@@ -32,7 +32,7 @@ export function Alerts() {
           <div className="flex justify-between items-start">
             <div>
               <h3 className="font-bold text-red-900">
-                Overdue: IT3040 Project
+                Overdue: IT3040 ITPM Project Due
               </h3>
               <p className="text-sm text-red-700 mt-1">
                 This task was due yesterday. It is affecting your productivity
@@ -53,7 +53,7 @@ export function Alerts() {
         <Card className="p-4 border-l-4 border-l-orange-500">
           <div className="flex justify-between items-start">
             <div>
-              <h3 className="font-bold text-gray-900">PAF Lab Report</h3>
+              <h3 className="font-bold text-gray-900">NDM Lab Report</h3>
               <p className="text-sm text-gray-600 mt-1">
                 Due tomorrow at 11:59 PM. You have 3 estimated hours remaining.
               </p>

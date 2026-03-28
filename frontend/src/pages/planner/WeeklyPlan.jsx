@@ -20,7 +20,7 @@ export function WeeklyPlan() {
     Monday: [
       {
         time: '09:00 AM',
-        task: 'IT3040 IT Project Management Lecture',
+        task: 'IT Project Management',
         type: 'class',
         color: 'bg-blue-100 text-blue-700 border-blue-200'
       },
@@ -36,13 +36,13 @@ export function WeeklyPlan() {
     Tuesday: [
       {
         time: '10:00 AM',
-        task: 'IT3040 IT Project Management Tutorial',
+        task: 'Network Design and Management',
         type: 'class',
         color: 'bg-purple-100 text-purple-700 border-purple-200'
       },
       {
         time: '03:00 PM',
-        task: 'NDM Lab Exam',
+        task: 'PAF Lab Report',
         type: 'study',
         color: 'bg-purple-500 text-white border-purple-600',
 
@@ -52,13 +52,13 @@ export function WeeklyPlan() {
     Wednesday: [
       {
         time: '11:00 AM',
-        task: 'IT3010 Data Structures and Algorithms Lecture',
+        task: 'DS Lab Test',
         type: 'class',
         color: 'bg-teal-100 text-teal-700 border-teal-200'
       },
       {
         time: '04:00 PM',
-        task: 'PAF Lab Report',
+        task: 'NDM Lab Report',
         type: 'study',
         color: 'bg-teal-500 text-white border-teal-600',
 
@@ -68,13 +68,13 @@ export function WeeklyPlan() {
     Thursday: [
       {
         time: '09:00 AM',
-        task: 'IT3020 ESD Lecture',
+        task: 'ITPM Lecture',
         type: 'class',
         color: 'bg-orange-100 text-orange-700 border-orange-200'
       },
       {
         time: '01:00 PM',
-        task: 'PAF Lab',
+        task: 'Online Quiz',
         type: 'study',
         color: 'bg-orange-500 text-white border-orange-600',
 
@@ -100,7 +100,7 @@ export function WeeklyPlan() {
     Saturday: [
       {
         time: '10:00 AM',
-        task: 'Deep Work: Calculus',
+        task: 'Study:Mid Term',
         type: 'study',
         color: 'bg-purple-500 text-white border-purple-600',
 
