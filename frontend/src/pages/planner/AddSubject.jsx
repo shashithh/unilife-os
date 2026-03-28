@@ -133,28 +133,7 @@ export function AddSubject() {
             required
           />
 
-          <div>
-            <label className="text-sm font-medium text-gray-700 ml-1 mb-2 block">
-              Color Theme
-            </label>
 
-            <div className="flex gap-3">
-              {[
-                'bg-blue-500',
-                'bg-purple-500',
-                'bg-teal-500',
-                'bg-orange-500',
-                'bg-red-500',
-                'bg-green-500'
-              ].map((color) => (
-                <button
-                  key={color}
-                  type="button"
-                  className={`w-10 h-10 rounded-full ${color} border-2 border-white shadow-sm hover:scale-110 transition-transform focus:ring-2 focus:ring-offset-2 focus:ring-gray-400`}
-                />
-              ))}
-            </div>
-          </div>
 
           <div className="pt-4 flex justify-end gap-3 border-t border-gray-100">
             <Button
@@ -173,4 +152,4 @@ export function AddSubject() {
       </Card>
     </div>
   );
-}
+} 

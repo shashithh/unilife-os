@@ -160,13 +160,23 @@ export function AIScheduler() {
                         priorities.
                       </p>
 
-                      <Button
-                        variant="primary"
-                        size="sm"
-                        onClick={() => navigate("/weekly-plan")}
-                      >
-                        View Weekly Plan
-                      </Button>
+                      <div className="flex gap-3 flex-wrap">
+                        <Button
+                          variant="primary"
+                          size="sm"
+                          onClick={() => navigate("/weekly-plan")}
+                        >
+                          View Weekly Plan
+                        </Button>
+
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          onClick={() => navigate("/calendar")}
+                        >
+                          View Calendar
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </div>
