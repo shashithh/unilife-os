@@ -1,31 +1,28 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const cors = require("cors");
-require("dotenv").config();
+const dotenv = require("dotenv");
+const connectDB = require("./config/db");
 
-const plannerRoutes = require("./routes/plannerRoutes");
+dotenv.config();
+connectDB();
 
 const app = express();
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Routes
-app.use("/api/planner", plannerRoutes);
+app.use("/api/subjects", require("./routes/subjectRoutes"));
+app.use("/api/tasks", require("./routes/taskRoutes"));
+app.use("/api/planner", require("./routes/plannerRoutes"));
+app.use("/api/calendar", require("./routes/calendarRoutes"));
+app.use("/api/alerts", require("./routes/alertRoutes"));
 
-// Home test route
 app.get("/", (req, res) => {
-    res.send("UniLife OS Backend Running...");
+    res.json({ message: "Smart Academic Planner API is running" });
 });
-
-// MongoDB Connection
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log("✅ MongoDB Connected"))
-    .catch(err => console.log("MongoDB Error:", err));
 
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-    console.log(`✅ Server running on port ${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });

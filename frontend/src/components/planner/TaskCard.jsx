@@ -3,10 +3,9 @@ import { Card } from '../ui/Card';
 import { Badge } from '../ui/Badge';
 import { RiskBadge } from './RiskBadge';
 import { Clock, Calendar, CheckCircle2, MoreVertical } from 'lucide-react';
-import { subjects } from '../../data/mockData';
 
-export function TaskCard({ task }) {
-  const subject = subjects.find((s) => s.id === task.subjectId);
+export function TaskCard({ task, onStatusChange }) {
+  const subject = task.subjectId; // Populated from backend
   const deadlineDate = new Date(task.deadline);
   const isOverdue = deadlineDate < new Date() && task.status !== 'Completed';
 
@@ -20,8 +19,8 @@ export function TaskCard({ task }) {
     <Card hover className="p-4 relative group">
       <div className="flex justify-between items-start mb-3">
         <div className="flex gap-2 items-center">
-          <Badge className={`${subject?.bgLight} ${subject?.text} border-none`}>
-            {subject?.code}
+          <Badge className={`bg-gray-100 text-gray-800 border-none`}>
+            {subject?.subjectCode || 'N/A'}
           </Badge>
 
           <Badge variant={priorityColors[task.priority]}>
@@ -29,8 +28,12 @@ export function TaskCard({ task }) {
           </Badge>
         </div>
 
-        <button className="text-gray-400 hover:text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity">
-          <MoreVertical className="w-4 h-4" />
+        <button 
+          className="text-gray-400 hover:text-green-600 opacity-0 group-hover:opacity-100 transition-opacity"
+          title="Mark complete / incomplete"
+          onClick={() => onStatusChange && onStatusChange(task._id, task.status === 'Completed' ? 'Pending' : 'Completed')}
+        >
+          <CheckCircle2 className="w-5 h-5" />
         </button>
       </div>
 

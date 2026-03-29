@@ -1,29 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card } from '../../components/ui/Card';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
 import { TaskCard } from '../../components/planner/TaskCard';
 import { PlannerNav } from '../../components/planner/PlannerNav';
-import { tasks, subjects } from '../../data/mockData';
 import { Plus, Filter, Search } from 'lucide-react';
+
 export function TaskList() {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterSubject, setFilterSubject] = useState('');
   const [filterPriority, setFilterPriority] = useState('');
-  const filteredTasks = tasks.filter((task) => {
-    const matchesSearch = task.title.
-    toLowerCase().
-    includes(searchTerm.toLowerCase());
-    const matchesSubject = filterSubject ?
-    task.subjectId === filterSubject :
-    true;
-    const matchesPriority = filterPriority ?
-    task.priority === filterPriority :
-    true;
-    return matchesSearch && matchesSubject && matchesPriority;
-  });
+  const [tasks, setTasks] = useState([]);
+  const [subjects, setSubjects] = useState([]);
+
+  useEffect(() => {
+    fetch('/api/subjects')
+      .then((res) => res.json())
+      .then(setSubjects)
+      .catch((err) => console.error('Error fetching subjects:', err));
+  }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (searchTerm) params.append('search', searchTerm);
+    if (filterSubject) params.append('subjectId', filterSubject);
+    if (filterPriority) params.append('priority', filterPriority);
+
+    fetch(`/api/tasks?${params.toString()}`)
+      .then((res) => res.json())
+      .then(setTasks)
+      .catch((err) => console.error('Error fetching tasks:', err));
+  }, [searchTerm, filterSubject, filterPriority]);
+
+  const handleStatusChange = async (id, newStatus) => {
+    try {
+      const res = await fetch(`/api/tasks/${id}/status`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      if (res.ok) {
+        setTasks((prev) =>
+          prev.map((t) => (t._id === id ? { ...t, status: newStatus } : t))
+        );
+      }
+    } catch (err) {
+      console.error('Failed to update status:', err);
+    }
+  };
+  const filteredTasks = tasks;
   return (
     <div>
       <div className="flex justify-between items-end mb-6">
@@ -67,8 +94,8 @@ export function TaskList() {
               label: 'All Subjects'
             },
             ...subjects.map((s) => ({
-              value: s.id,
-              label: s.name
+              value: s._id,
+              label: s.subjectName
             }))]
             }
             className="!gap-0" />
@@ -108,7 +135,7 @@ export function TaskList() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {filteredTasks.map((task) =>
-        <TaskCard key={task.id} task={task} />
+        <TaskCard key={task._id} task={task} onStatusChange={handleStatusChange} />
         )}
 
         {filteredTasks.length === 0 &&

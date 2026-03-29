@@ -1,6 +1,11 @@
-const router = require("express").Router();
-const c = require("../controllers/calendarController");
+const express = require("express");
+const router = express.Router();
+const {
+    getEvents,
+    addEvent
+} = require("../controllers/calendarController");
 
-router.get("/", c.getCalendar);
+router.get("/", getEvents);
+router.post("/", addEvent);
 
 module.exports = router;

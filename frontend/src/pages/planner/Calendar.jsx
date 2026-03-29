@@ -1,13 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { PlannerNav } from '../../components/planner/PlannerNav';
 import { Input } from '../../components/ui/Input';
-import { ChevronLeft, ChevronRight, Plus, X, CheckCircle2 } from 'lucide-react';
+import {
+  ChevronLeft,
+  ChevronRight,
+  Plus,
+  X,
+  CheckCircle2
+} from 'lucide-react';
 
 export function Calendar() {
   const [showEventForm, setShowEventForm] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [events, setEvents] = useState([]);
+  const [errors, setErrors] = useState({});
+  const [displayedDate, setDisplayedDate] = useState(new Date());
 
   const [formData, setFormData] = useState({
     title: '',
@@ -16,16 +25,26 @@ export function Calendar() {
     type: ''
   });
 
-  const [events, setEvents] = useState([
-    { day: 15, title: 'IT3040 ITPM Project Due', color: 'bg-red-100 text-red-700 border-red-200' },
-    { day: 24, title: 'Study: Mid Term', color: 'bg-purple-100 text-purple-700 border-purple-200' },
-    { day: 28, title: 'DS Lab Test', color: 'bg-orange-100 text-orange-700 border-orange-200' }
-  ]);
+  const fetchEvents = async () => {
+    try {
+      const res = await fetch('/api/calendar');
+      const data = await res.json();
+      setEvents(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
-  const [errors, setErrors] = useState({});
+  useEffect(() => {
+    fetchEvents();
+  }, []);
 
-  const daysInMonth = 31;
-  const startDay = 3;
+  const year = displayedDate.getFullYear();
+  const month = displayedDate.getMonth();
+
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const startDay = new Date(year, month, 1).getDay();
+
   const days = Array.from({ length: 42 }, (_, i) => {
     const dayNum = i - startDay + 1;
     return dayNum > 0 && dayNum <= daysInMonth ? dayNum : null;
@@ -36,28 +55,20 @@ export function Calendar() {
   const validateField = (name, value) => {
     let error = '';
 
-    if (name === 'title') {
-      if (!value.trim()) {
-        error = 'Event title is required';
-      }
+    if (name === 'title' && !value.trim()) {
+      error = 'Event title is required';
     }
 
-    if (name === 'date') {
-      if (!value) {
-        error = 'Date is required';
-      }
+    if (name === 'date' && !value) {
+      error = 'Date is required';
     }
 
-    if (name === 'time') {
-      if (!value) {
-        error = 'Time is required';
-      }
+    if (name === 'time' && !value) {
+      error = 'Time is required';
     }
 
-    if (name === 'type') {
-      if (!value) {
-        error = 'Event type is required';
-      }
+    if (name === 'type' && !value) {
+      error = 'Event type is required';
     }
 
     return error;
@@ -89,45 +100,64 @@ export function Calendar() {
     }));
   };
 
-  const getEventColor = (type) => {
-    if (type === 'exam') return 'bg-red-100 text-red-700 border-red-200';
-    if (type === 'study') return 'bg-purple-100 text-purple-700 border-purple-200';
-    if (type === 'assignment') return 'bg-orange-100 text-orange-700 border-orange-200';
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) return;
+
+    try {
+      const res = await fetch('/api/calendar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      if (res.ok) {
+        setIsSuccess(true);
+        setFormData({ title: '', date: '', time: '', type: '' });
+        setErrors({});
+        fetchEvents();
+
+        setTimeout(() => {
+          setIsSuccess(false);
+          setShowEventForm(false);
+        }, 1200);
+      }
+    } catch (err) {
+      console.error('Failed to save event:', err);
+    }
+  };
+
+  const getEventStyles = (event) => {
+    if (event.source === 'task') {
+      if (event.priority === 'High') return 'bg-red-100 text-red-700 border-red-200';
+      if (event.priority === 'Medium') return 'bg-orange-100 text-orange-700 border-orange-200';
+      return 'bg-blue-100 text-blue-700 border-blue-200';
+    }
+
+    if (event.type === 'exam') return 'bg-red-100 text-red-700 border-red-200';
+    if (event.type === 'study') return 'bg-purple-100 text-purple-700 border-purple-200';
+    if (event.type === 'assignment') return 'bg-orange-100 text-orange-700 border-orange-200';
     return 'bg-blue-100 text-blue-700 border-blue-200';
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (validateForm()) {
-      const selectedDay = new Date(formData.date).getDate();
-
-      setEvents((prev) => [
-        ...prev,
-        {
-          day: selectedDay,
-          title: formData.title,
-          color: getEventColor(formData.type)
-        }
-      ]);
-
-      setIsSuccess(true);
-
-      setFormData({
-        title: '',
-        date: '',
-        time: '',
-        type: ''
-      });
-
-      setErrors({});
-
-      setTimeout(() => {
-        setIsSuccess(false);
-        setShowEventForm(false);
-      }, 1200);
-    }
+  const getEventsForDay = (day) => {
+    return events.filter((event) => {
+      const eventDate = new Date(event.date);
+      return (
+        eventDate.getFullYear() === year &&
+        eventDate.getMonth() === month &&
+        eventDate.getDate() === day
+      );
+    });
   };
+
+  const monthLabel = displayedDate.toLocaleString('en-US', {
+    month: 'long',
+    year: 'numeric'
+  });
+
+  const today = new Date();
 
   return (
     <div className="max-w-6xl mx-auto h-full flex flex-col relative">
@@ -152,20 +182,33 @@ export function Calendar() {
 
       <Card className="flex-1 p-6 flex flex-col bg-white/80">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-800">October 2026</h2>
+          <h2 className="text-2xl font-bold text-gray-800">{monthLabel}</h2>
+
           <div className="flex gap-2">
             <Button
               variant="secondary"
               size="sm"
               icon={<ChevronLeft className="w-4 h-4" />}
+              onClick={() =>
+                setDisplayedDate(new Date(year, month - 1, 1))
+              }
             />
-            <Button variant="secondary" size="sm">
+
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => setDisplayedDate(new Date())}
+            >
               Today
             </Button>
+
             <Button
               variant="secondary"
               size="sm"
               icon={<ChevronRight className="w-4 h-4" />}
+              onClick={() =>
+                setDisplayedDate(new Date(year, month + 1, 1))
+              }
             />
           </div>
         </div>
@@ -183,28 +226,36 @@ export function Calendar() {
           {days.map((day, idx) => (
             <div
               key={idx}
-              className={`min-h-[100px] bg-white p-2 transition-colors hover:bg-gray-50 cursor-pointer ${!day ? 'bg-gray-50/50' : ''
-                }`}
+              className={`min-h-[110px] bg-white p-2 transition-colors hover:bg-gray-50 ${!day ? 'bg-gray-50/50' : ''}`}
             >
               {day && (
                 <>
                   <span
-                    className={`text-sm font-medium w-7 h-7 flex items-center justify-center rounded-full ${day === 24 ? 'bg-blue-600 text-white' : 'text-gray-700'
+                    className={`text-sm font-medium w-7 h-7 flex items-center justify-center rounded-full ${day === today.getDate() &&
+                        month === today.getMonth() &&
+                        year === today.getFullYear()
+                        ? 'bg-blue-600 text-white'
+                        : 'text-gray-700'
                       }`}
                   >
                     {day}
                   </span>
 
-                  {events
-                    .filter((event) => event.day === day)
-                    .map((event, eventIndex) => (
-                      <div
-                        key={eventIndex}
-                        className={`mt-1 p-1 text-xs rounded border truncate ${event.color}`}
-                      >
-                        {event.title}
-                      </div>
-                    ))}
+                  {getEventsForDay(day).map((event, eventIndex) => (
+                    <div
+                      key={eventIndex}
+                      className={`mt-1 p-1 text-xs rounded border truncate ${getEventStyles(event)}`}
+                      title={
+                        event.source === 'task' && event.subjectCode
+                          ? `${event.subjectCode} - ${event.title}`
+                          : event.title
+                      }
+                    >
+                      {event.source === 'task' && event.subjectCode
+                        ? `${event.subjectCode}: ${event.title}`
+                        : event.title}
+                    </div>
+                  ))}
                 </>
               )}
             </div>
@@ -234,7 +285,9 @@ export function Calendar() {
             {isSuccess && (
               <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-xl flex items-center gap-2 text-green-700">
                 <CheckCircle2 className="w-5 h-5" />
-                <span className="text-sm font-medium">Event added successfully!</span>
+                <span className="text-sm font-medium">
+                  Event added successfully!
+                </span>
               </div>
             )}
 
@@ -290,6 +343,7 @@ export function Calendar() {
                 >
                   Cancel
                 </Button>
+
                 <Button type="submit" variant="primary">
                   Save Event
                 </Button>

@@ -1,16 +1,40 @@
 const Subject = require("../models/Subject");
 
-exports.createSubject = async (req, res, next) => {
+const addSubject = async (req, res) => {
     try {
-        const { name, code, color } = req.body;
-        const subject = await Subject.create({ name, code, color });
+        const { subjectName, subjectCode, colorTheme } = req.body;
+
+        if (!subjectName || !subjectCode) {
+            return res.status(400).json({ message: "All fields are required" });
+        }
+
+        const existingSubject = await Subject.findOne({ subjectCode });
+        if (existingSubject) {
+            return res.status(400).json({ message: "Subject code already exists" });
+        }
+
+        const subject = await Subject.create({
+            subjectName,
+            subjectCode,
+            colorTheme
+        });
+
         res.status(201).json(subject);
-    } catch (e) { next(e); }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 };
 
-exports.getSubjects = async (req, res, next) => {
+const getSubjects = async (req, res) => {
     try {
         const subjects = await Subject.find().sort({ createdAt: -1 });
         res.json(subjects);
-    } catch (e) { next(e); }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+module.exports = {
+    addSubject,
+    getSubjects
 };

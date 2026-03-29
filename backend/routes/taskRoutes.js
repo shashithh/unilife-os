@@ -1,12 +1,13 @@
-const router = require("express").Router();
-const c = require("../controllers/taskController");
+const express = require("express");
+const router = express.Router();
+const {
+    addTask,
+    getTasks,
+    updateTaskStatus
+} = require("../controllers/taskController");
 
-router.post("/", c.addTask);
-router.get("/", c.getTasks);
-
-router.put("/:id/complete", c.completeTask);
-
-router.get("/weekly-plan", c.weeklyPlan);
-router.put("/auto-reschedule", c.autoReschedule);
+router.post("/", addTask);
+router.get("/", getTasks);
+router.put("/:id/status", updateTaskStatus);
 
 module.exports = router;

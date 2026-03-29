@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card } from '../../components/ui/Card';
 import { PlannerNav } from '../../components/planner/PlannerNav';
-import { productivityStats } from '../../data/mockData';
 import { TrendingUp, Clock, Target, Flame } from 'lucide-react';
 import {
   BarChart,
@@ -16,6 +15,25 @@ import {
   Cell } from
 'recharts';
 export function Productivity() {
+  const [stats, setStats] = useState(null);
+
+  useEffect(() => {
+    fetch('/api/planner/productivity')
+      .then((res) => res.json())
+      .then(setStats)
+      .catch((err) => console.error('Error fetching productivity stats:', err));
+  }, []);
+
+  if (!stats) {
+    return <div className="p-8 text-center text-gray-500">Loading insights...</div>;
+  }
+
+  const COLORS = ['#8B5CF6', '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#EC4899'];
+  const formattedFocus = stats.subjectFocus?.map((item, idx) => ({
+    ...item,
+    color: COLORS[idx % COLORS.length]
+  })) || [];
+
   return (
     <div className="max-w-6xl mx-auto">
       <div className="mb-6">
@@ -36,7 +54,7 @@ export function Productivity() {
             <Target className="w-6 h-6" />
           </div>
           <p className="text-3xl font-bold text-gray-900">
-            {productivityStats.completionRate}%
+            {stats.completionRate}%
           </p>
           <p className="text-sm text-gray-500 font-medium mt-1">
             Completion Rate
@@ -48,7 +66,7 @@ export function Productivity() {
             <Clock className="w-6 h-6" />
           </div>
           <p className="text-3xl font-bold text-gray-900">
-            {productivityStats.studyHoursThisWeek}h
+            {stats.studyHoursThisWeek}h
           </p>
           <p className="text-sm text-gray-500 font-medium mt-1">Study Hours</p>
         </Card>
@@ -58,7 +76,7 @@ export function Productivity() {
             <Flame className="w-6 h-6" />
           </div>
           <p className="text-3xl font-bold text-gray-900">
-            {productivityStats.streakDays}
+            {stats.streakDays}
           </p>
           <p className="text-sm text-gray-500 font-medium mt-1">Day Streak</p>
         </Card>
@@ -68,7 +86,7 @@ export function Productivity() {
             <TrendingUp className="w-6 h-6" />
           </div>
           <p className="text-3xl font-bold text-gray-900">
-            {productivityStats.score}
+            {stats.score}
           </p>
           <p className="text-sm text-gray-500 font-medium mt-1">
             Productivity Score
@@ -84,7 +102,7 @@ export function Productivity() {
           </h3>
           <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={productivityStats.weeklyTrend}>
+              <BarChart data={stats.weeklyTrend}>
                 <CartesianGrid
                   strokeDasharray="3 3"
                   vertical={false}
@@ -133,7 +151,7 @@ export function Productivity() {
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
-                  data={productivityStats.subjectFocus}
+                  data={formattedFocus}
                   cx="50%"
                   cy="50%"
                   innerRadius={60}
@@ -141,7 +159,7 @@ export function Productivity() {
                   paddingAngle={5}
                   dataKey="value">
                   
-                  {productivityStats.subjectFocus.map((entry, index) =>
+                  {formattedFocus.map((entry, index) =>
                   <Cell key={`cell-${index}`} fill={entry.color} />
                   )}
                 </Pie>
@@ -155,7 +173,7 @@ export function Productivity() {
               </PieChart>
             </ResponsiveContainer>
             <div className="w-1/2 space-y-3">
-              {productivityStats.subjectFocus.map((subject, idx) =>
+              {formattedFocus.map((subject, idx) =>
               <div key={idx} className="flex items-center gap-2">
                   <div
                   className="w-3 h-3 rounded-full"

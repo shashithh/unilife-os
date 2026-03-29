@@ -1,7 +1,11 @@
-const router = require("express").Router();
-const c = require("../controllers/subjectController");
+const express = require("express");
+const router = express.Router();
+const {
+    addSubject,
+    getSubjects
+} = require("../controllers/subjectController");
 
-router.post("/", c.createSubject);
-router.get("/", c.getSubjects);
+router.post("/", addSubject);
+router.get("/", getSubjects);
 
 module.exports = router;

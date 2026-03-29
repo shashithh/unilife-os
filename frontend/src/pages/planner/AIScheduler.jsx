@@ -9,20 +9,44 @@ import {
   RefreshCw,
   CheckCircle2,
   Calendar,
+  AlertOctagon
 } from "lucide-react";
 
 export function AIScheduler() {
   const navigate = useNavigate();
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [hasAnalyzed, setHasAnalyzed] = useState(false);
+  const [analysisResult, setAnalysisResult] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleAnalyze = () => {
+  const handleAnalyze = async () => {
     setIsAnalyzing(true);
+    setHasAnalyzed(false);
+    setErrorMessage("");
+    setAnalysisResult(null);
 
-    setTimeout(() => {
+    try {
+      const response = await fetch("/api/planner/ai-scheduler/run", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setAnalysisResult(data);
+        setHasAnalyzed(true);
+      } else {
+        setErrorMessage(data.message || "AI analysis request failed.");
+      }
+    } catch (error) {
+      console.error("Analysis failed", error);
+      setErrorMessage("Cannot connect to backend server. Make sure backend is running on port 5000.");
+    } finally {
       setIsAnalyzing(false);
-      setHasAnalyzed(true);
-    }, 2000);
+    }
   };
 
   return (
@@ -52,8 +76,8 @@ export function AIScheduler() {
             </h2>
 
             <p className="text-sm text-gray-600 mb-6">
-              The AI checks your past completion rate, upcoming deadlines, and
-              task priorities to suggest the most efficient study schedule.
+              The AI checks your upcoming deadlines, task priorities, and task load
+              to suggest the most efficient study schedule.
             </p>
 
             <Button
@@ -90,7 +114,7 @@ export function AIScheduler() {
               </li>
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-green-500" />
-                Available Free Time
+                Upcoming Pending Tasks
               </li>
             </ul>
           </Card>
@@ -104,9 +128,20 @@ export function AIScheduler() {
                 Processing your schedule...
               </h3>
               <p className="text-gray-500 max-w-md">
-                Calculating optimal study blocks, predicting deadline risks, and
-                auto-rescheduling missed tasks.
+                Calculating optimal study blocks, checking deadline risk, and
+                generating your weekly planner.
               </p>
+            </Card>
+          ) : errorMessage ? (
+            <Card className="h-full min-h-[400px] flex flex-col items-center justify-center p-8 text-center border-l-4 border-l-red-500">
+              <AlertOctagon className="w-12 h-12 text-red-500 mb-4" />
+              <h3 className="text-xl font-bold text-gray-900 mb-2">
+                Analysis Failed
+              </h3>
+              <p className="text-gray-600 max-w-md mb-6">{errorMessage}</p>
+              <Button variant="primary" onClick={handleAnalyze}>
+                Try Again
+              </Button>
             </Card>
           ) : hasAnalyzed ? (
             <div className="space-y-6 animate-slide-up">
@@ -122,23 +157,27 @@ export function AIScheduler() {
                   </div>
 
                   <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
-                    Productivity Score: +12%
+                    Productivity Score: +{analysisResult?.productivityGain || 0}%
                   </span>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 mt-6">
                   <div className="p-4 bg-gray-50 rounded-xl">
                     <p className="text-sm text-gray-500 mb-1">
-                      Completed Tasks
+                      Tasks Rescheduled
                     </p>
-                    <p className="text-2xl font-bold text-gray-900">3</p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {analysisResult?.tasksRescheduled || 0}
+                    </p>
                   </div>
 
                   <div className="p-4 bg-gray-50 rounded-xl">
                     <p className="text-sm text-gray-500 mb-1">
-                      Pending Tasks
+                      Study Blocks Added
                     </p>
-                    <p className="text-2xl font-bold text-gray-900">5</p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {analysisResult?.studyBlocksAdded || 0}
+                    </p>
                   </div>
                 </div>
               </Card>
@@ -153,11 +192,11 @@ export function AIScheduler() {
                     <Calendar className="w-6 h-6 text-blue-500 shrink-0" />
                     <div>
                       <h4 className="font-semibold text-gray-900">
-                        Weekly Plan Generated
+                        {analysisResult?.recommendation || "Weekly Plan Generated"}
                       </h4>
                       <p className="text-sm text-gray-600 mt-1 mb-3">
-                        A new study plan has been created based on your highest
-                        priorities.
+                        {analysisResult?.message ||
+                          "A new study plan has been created based on your highest priorities."}
                       </p>
 
                       <div className="flex gap-3 flex-wrap">

@@ -70,15 +70,32 @@ export function AddSubject() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (validateForm()) {
-      setIsSuccess(true);
+      try {
+        const response = await fetch('/api/subjects', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            subjectName: formData.subjectName,
+            subjectCode: formData.subjectCode
+          })
+        });
 
-      setTimeout(() => {
-        navigate('/');
-      }, 1500);
+        if (response.ok) {
+          setIsSuccess(true);
+          setTimeout(() => {
+            navigate('/');
+          }, 1500);
+        } else {
+          // You could set an error state here if needed
+          console.error('Failed to add subject');
+        }
+      } catch (err) {
+        console.error('Error adding subject:', err);
+      }
     }
   };
 

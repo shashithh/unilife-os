@@ -2,30 +2,48 @@ const mongoose = require("mongoose");
 
 const taskSchema = new mongoose.Schema(
     {
-        title: { type: String, required: true, trim: true },
-
-        deadline: { type: Date, required: true },
-
-        priority: {
+        title: {
             type: String,
-            enum: ["Low", "Medium", "High"],
+            required: true,
+            trim: true
+        },
+        subjectId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Subject",
             required: true
         },
-
-        estimatedHours: { type: Number, default: 1 },
-
-        // ✅ Calendar support
-        scheduledDate: { type: Date, required: true }, // show on calendar (day)
-        startTime: { type: String, default: "18:00" }, // optional for UI
-        endTime: { type: String, default: "19:00" },   // optional for UI
-
+        deadline: {
+            type: Date,
+            required: true
+        },
+        priority: {
+            type: String,
+            enum: ["High", "Medium", "Low"],
+            required: true
+        },
+        estimatedHours: {
+            type: Number,
+            required: true,
+            min: 0.5
+        },
+        description: {
+            type: String,
+            default: ""
+        },
+        risk: {
+            type: String,
+            enum: ["Safe", "Warning", "Critical"],
+            default: "Safe"
+        },
         status: {
             type: String,
-            enum: ["Pending", "Completed", "Missed"],
+            enum: ["Pending", "In Progress", "Completed", "Overdue"],
             default: "Pending"
         },
-
-        completionRate: { type: Number, default: 0 }
+        completionRate: {
+            type: Number,
+            default: 0
+        }
     },
     { timestamps: true }
 );

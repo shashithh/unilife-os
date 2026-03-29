@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card } from '../../components/ui/Card';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
 import { PlannerNav } from '../../components/planner/PlannerNav';
-import { subjects } from '../../data/mockData';
 import { CheckCircle2, ArrowLeft } from 'lucide-react';
 
 export function AddTask() {
@@ -21,6 +20,26 @@ export function AddTask() {
 
   const [errors, setErrors] = useState({});
   const [isSuccess, setIsSuccess] = useState(false);
+  const [subjects, setSubjects] = useState([]);
+  const [submitError, setSubmitError] = useState('');
+
+  useEffect(() => {
+    const fetchSubjects = async () => {
+      try {
+        const response = await fetch('/api/subjects');
+        const data = await response.json();
+        if (response.ok) {
+          setSubjects(data);
+        } else {
+          console.error('Failed to fetch subjects:', data.message);
+        }
+      } catch (err) {
+        console.error('Failed to fetch subjects:', err);
+      }
+    };
+
+    fetchSubjects();
+  }, []);
 
   const validate = () => {
     const newErrors = {};
@@ -42,19 +61,45 @@ export function AddTask() {
 
     if (!formData.priority) newErrors.priority = 'Priority must be selected';
 
+    if (!formData.estimatedHours) {
+      newErrors.estimatedHours = 'Estimated hours is required';
+    } else if (Number(formData.estimatedHours) < 0.5) {
+      newErrors.estimatedHours = 'Estimated hours must be at least 0.5';
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setSubmitError('');
 
-    if (validate()) {
-      setIsSuccess(true);
+    if (!validate()) return;
 
-      setTimeout(() => {
-        navigate('/tasks');
-      }, 1500);
+    try {
+      const response = await fetch('/api/tasks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...formData,
+          estimatedHours: Number(formData.estimatedHours)
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setIsSuccess(true);
+        setTimeout(() => {
+          navigate('/tasks');
+        }, 1500);
+      } else {
+        setSubmitError(data.message || 'Failed to create task');
+      }
+    } catch (err) {
+      console.error('Error creating task:', err);
+      setSubmitError('Server error while creating task');
     }
   };
 
@@ -81,11 +126,17 @@ export function AddTask() {
       <PlannerNav />
 
       {isSuccess && (
-        <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl flex items-center gap-3 text-green-700 animate-slide-up">
+        <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl flex items-center gap-3 text-green-700">
           <CheckCircle2 className="w-5 h-5" />
           <span className="font-medium">
             Task created successfully! Redirecting...
           </span>
+        </div>
+      )}
+
+      {submitError && (
+        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700">
+          {submitError}
         </div>
       )}
 
@@ -117,10 +168,13 @@ export function AddTask() {
                 })
               }
               error={errors.subjectId}
-              options={subjects.map((s) => ({
-                value: s.id,
-                label: s.name
-              }))}
+              options={[
+                { value: '', label: 'Select Subject' },
+                ...subjects.map((s) => ({
+                  value: s._id,
+                  label: s.subjectName
+                }))
+              ]}
             />
 
             <Input
@@ -148,18 +202,10 @@ export function AddTask() {
               }
               error={errors.priority}
               options={[
-                {
-                  value: 'High',
-                  label: 'High Priority (Red)'
-                },
-                {
-                  value: 'Medium',
-                  label: 'Medium Priority (Orange)'
-                },
-                {
-                  value: 'Low',
-                  label: 'Low Priority (Green)'
-                }
+                { value: '', label: 'Select Priority' },
+                { value: 'High', label: 'High Priority (Red)' },
+                { value: 'Medium', label: 'Medium Priority (Orange)' },
+                { value: 'Low', label: 'Low Priority (Green)' }
               ]}
             />
 
@@ -176,6 +222,7 @@ export function AddTask() {
                   estimatedHours: e.target.value
                 })
               }
+              error={errors.estimatedHours}
             />
 
             <Input

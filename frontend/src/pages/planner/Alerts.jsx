@@ -1,9 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { PlannerNav } from '../../components/planner/PlannerNav';
 import { AlertOctagon, Clock, BellRing, Settings } from 'lucide-react';
 export function Alerts() {
+  const [alerts, setAlerts] = useState({
+    overdue: [],
+    upcoming: [],
+    notifications: []
+  });
+
+  useEffect(() => {
+    fetch('/api/alerts')
+      .then(res => res.json())
+      .then(setAlerts)
+      .catch(err => console.error('Error fetching alerts:', err));
+  }, []);
+
   return (
     <div className="max-w-4xl mx-auto">
       <div className="flex justify-between items-end mb-6">
@@ -28,20 +41,22 @@ export function Alerts() {
           <h2 className="text-lg font-bold text-gray-900">Action Required</h2>
         </div>
 
-        <Card className="p-4 border-l-4 border-l-red-500 bg-red-50/50">
-          <div className="flex justify-between items-start">
-            <div>
-              <h3 className="font-bold text-red-900">
-                Overdue: IT3040 ITPM Project Due
-              </h3>
-              <p className="text-sm text-red-700 mt-1">
-                This task was due yesterday. It is affecting your productivity
-                score.
-              </p>
+        {alerts.overdue.length > 0 ? alerts.overdue.map(task => (
+          <Card key={task._id} className="p-4 border-l-4 border-l-red-500 bg-red-50/50 mb-3">
+            <div className="flex justify-between items-start">
+              <div>
+                <h3 className="font-bold text-red-900">
+                  Overdue: {task.subjectId?.subjectCode} {task.title}
+                </h3>
+                <p className="text-sm text-red-700 mt-1">
+                  This task was due on {new Date(task.deadline).toLocaleDateString()}. It is affecting your productivity.
+                </p>
+              </div>
             </div>
-
-          </div>
-        </Card>
+          </Card>
+        )) : (
+          <p className="text-gray-500 text-sm italic">No overdue tasks. Great job!</p>
+        )}
 
         <div className="flex items-center gap-2 mb-4 mt-8">
           <Clock className="w-5 h-5 text-orange-500" />
@@ -50,17 +65,20 @@ export function Alerts() {
           </h2>
         </div>
 
-        <Card className="p-4 border-l-4 border-l-orange-500">
-          <div className="flex justify-between items-start">
-            <div>
-              <h3 className="font-bold text-gray-900">NDM Lab Report</h3>
-              <p className="text-sm text-gray-600 mt-1">
-                Due tomorrow at 11:59 PM. You have 3 estimated hours remaining.
-              </p>
+        {alerts.upcoming.length > 0 ? alerts.upcoming.map(task => (
+          <Card key={task._id} className="p-4 border-l-4 border-l-orange-500 mb-3">
+            <div className="flex justify-between items-start">
+              <div>
+                <h3 className="font-bold text-gray-900">{task.title}</h3>
+                <p className="text-sm text-gray-600 mt-1">
+                  Due on {new Date(task.deadline).toLocaleDateString()}. You have {task.estimatedHours} estimated hours remaining.
+                </p>
+              </div>
             </div>
-
-          </div>
-        </Card>
+          </Card>
+        )) : (
+          <p className="text-gray-500 text-sm italic">No upcoming deadlines in the next 3 days.</p>
+        )}
 
         <div className="flex items-center gap-2 mb-4 mt-8">
           <BellRing className="w-5 h-5 text-blue-500" />
@@ -69,17 +87,20 @@ export function Alerts() {
           </h2>
         </div>
 
-        <Card className="p-4 border-l-4 border-l-blue-500">
-          <div className="flex justify-between items-start">
-            <div>
-              <h3 className="font-bold text-gray-900">Weekly Plan Generated</h3>
-              <p className="text-sm text-gray-600 mt-1">
-                AI has successfully generated your study plan for next week.
-              </p>
+        {alerts.notifications.length > 0 ? alerts.notifications.map((notif, idx) => (
+          <Card key={idx} className="p-4 border-l-4 border-l-blue-500 mb-3">
+            <div className="flex justify-between items-start">
+              <div>
+                <h3 className="font-bold text-gray-900">{notif.title}</h3>
+                <p className="text-sm text-gray-600 mt-1">
+                  {notif.message}
+                </p>
+              </div>
             </div>
-
-          </div>
-        </Card>
+          </Card>
+        )) : (
+          <p className="text-gray-500 text-sm italic">No new notifications.</p>
+        )}
       </div>
     </div>);
 
