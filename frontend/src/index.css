@@ -1,0 +1,13 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #f4f6fb;
+  color: #1a1a2e;
+}
+
+a { text-decoration: none; color: inherit; }
+
+button { cursor: pointer; font-family: inherit; }
+
+input, select, textarea { font-family: inherit; }
