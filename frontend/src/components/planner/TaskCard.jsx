@@ -24,7 +24,7 @@ export function TaskCard({ task, onStatusChange }) {
           </Badge>
 
           <Badge variant={priorityColors[task.priority]}>
-            {task.priority}
+            Priority: {task.priority}
           </Badge>
         </div>
 
@@ -49,7 +49,7 @@ export function TaskCard({ task, onStatusChange }) {
           >
             <Calendar className="w-4 h-4" />
             <span>
-              {deadlineDate.toLocaleDateString('en-US', {
+              Due: {deadlineDate.toLocaleDateString('en-US', {
                 month: 'short',
                 day: 'numeric'
               })}
