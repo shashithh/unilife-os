@@ -11,11 +11,56 @@ const userSchema = new mongoose.Schema(
       default: "Student",
     },
 
-    // Optional fields (useful for Student)
+    // Student fields
     studentId: { type: String, default: "" },
 
-    // Optional fields (useful for Counselor)
+    // Counselor fields
     specialization: { type: String, default: "" },
+    bio: { type: String, default: "" },
+    availabilityStatus: {
+      type: String,
+      enum: ["Available", "Unavailable", "Busy"],
+      default: "Available",
+    },
+    counselingModes: {
+      type: [String],
+      default: ["Online", "In-person"],
+    },
+    profileImage: { type: String, default: "" },
+
+    // New privacy/professional fields for counselor
+    displayName: { type: String, default: "", trim: true },
+    workEmail: { type: String, default: "", trim: true },
+    phone: { type: String, default: "", trim: true },
+    licenseNumber: { type: String, default: "", trim: true },
+    experienceYears: { type: Number, default: 0 },
+    consultationMode: {
+      type: String,
+      enum: ["Online", "Physical", "Both"],
+      default: "Both",
+    },
+    showFullName: {
+      type: String,
+      enum: ["Yes", "No"],
+      default: "No",
+    },
+    allowDirectContact: {
+      type: String,
+      enum: ["Yes", "No"],
+      default: "No",
+    },
+    profileVisibility: {
+      type: String,
+      enum: [
+        "Students can view limited profile",
+        "Only admin can view full profile",
+      ],
+      default: "Students can view limited profile",
+    },
+    confidentialityAccepted: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
