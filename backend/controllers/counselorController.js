@@ -1,10 +1,48 @@
 const User = require("../models/User");
 
+<<<<<<< HEAD
 // ✅ Get all counselors
 exports.getAllCounselors = async (req, res) => {
   try {
     const counselors = await User.find({ role: "Counselor" }).select("-password");
     res.json(counselors);
+=======
+// Helper to sanitize counselor for student view
+const sanitizeCounselor = (counselor) => {
+  const c = counselor.toObject();
+  
+  // 1. Full name vs Display Name
+  if (c.showFullName === "No" && c.displayName) {
+    c.fullName = c.displayName;
+  }
+  
+  // 2. Hide professional details from students (license, confidentiality)
+  delete c.licenseNumber;
+  delete c.confidentialityAccepted;
+  delete c.email; // Original user email (use workEmail instead if allowed)
+  
+  // 3. Direct contact settings
+  if (c.allowDirectContact === "No") {
+    delete c.workEmail;
+    delete c.phone;
+  }
+  
+  return c;
+};
+
+// ✅ Get all counselors
+exports.getAllCounselors = async (req, res) => {
+  try {
+    // Filter by visibility (if needed)
+    const counselors = await User.find({ 
+      role: "Counselor",
+      profileVisibility: { $ne: "Only admin can view full profile" }
+    }).select("-password");
+    
+    // Map sanitization
+    const sanitized = counselors.map(sanitizeCounselor);
+    res.json(sanitized);
+>>>>>>> 14f4b5c (setup wellbeing hub backend structure with models routes and controllers)
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -15,8 +53,16 @@ exports.getCounselorById = async (req, res) => {
   try {
     const { id } = req.params;
     const counselor = await User.findOne({ _id: id, role: "Counselor" }).select("-password");
+<<<<<<< HEAD
     if (!counselor) return res.status(404).json({ error: "Counselor not found" });
     res.json(counselor);
+=======
+    
+    if (!counselor) return res.status(404).json({ error: "Counselor not found" });
+    
+    // Sanitize
+    res.json(sanitizeCounselor(counselor));
+>>>>>>> 14f4b5c (setup wellbeing hub backend structure with models routes and controllers)
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -62,3 +108,27 @@ exports.getCounselorSlots = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+<<<<<<< HEAD
+=======
+
+// ✅ Update counselor profile (self)
+exports.updateProfile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    if (req.user.role !== "Counselor") {
+      return res.status(403).json({ error: "Only counselors can update profile settings" });
+    }
+
+    const updates = req.body;
+    // Remove fields that should not be updated here
+    delete updates.password;
+    delete updates.role;
+    delete updates.email;
+
+    const updatedUser = await User.findByIdAndUpdate(userId, updates, { new: true }).select("-password");
+    res.json({ message: "Profile updated successfully ✅", user: updatedUser });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+>>>>>>> 14f4b5c (setup wellbeing hub backend structure with models routes and controllers)

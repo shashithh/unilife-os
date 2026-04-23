@@ -51,7 +51,11 @@ const getStudentOverview = async (req, res) => {
             student: userId,
             status: { $in: ["Pending", "Confirmed"] }
         })
+<<<<<<< HEAD
         .populate("counselor", "fullName")
+=======
+        .populate("counselor", "fullName displayName showFullName")
+>>>>>>> 14f4b5c (setup wellbeing hub backend structure with models routes and controllers)
         .sort({ date: 1, timeSlot: 1 })
         .lean();
 
@@ -63,7 +67,19 @@ const getStudentOverview = async (req, res) => {
         let nextSessionDate = null;
 
         if (nextBooking) {
+<<<<<<< HEAD
             nextSessionCounselor = nextBooking.counselor ? nextBooking.counselor.fullName : null;
+=======
+            const c = nextBooking.counselor;
+            if (c) {
+                // Respect privacy settings
+                if (c.showFullName === "No" && c.displayName) {
+                    nextSessionCounselor = c.displayName;
+                } else {
+                    nextSessionCounselor = c.fullName;
+                }
+            }
+>>>>>>> 14f4b5c (setup wellbeing hub backend structure with models routes and controllers)
             const bookingDate = new Date(nextBooking.date + "T00:00:00");
             const diffMs = bookingDate - now;
             const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
