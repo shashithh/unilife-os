@@ -3,4 +3,6 @@ frontend/node_modules/
 backend/node_modules/
 dist/
 build/
-.env
+.envfrontend/playwright-report/
+frontend/test-results/
+test-results/
