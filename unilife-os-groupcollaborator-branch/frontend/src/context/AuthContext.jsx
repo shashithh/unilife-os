@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import axios from 'axios';
 
 const AuthContext = createContext(null);
@@ -6,27 +6,36 @@ const AuthContext = createContext(null);
 const TOKEN_KEY = 'unilife_token';
 const USER_KEY  = 'unilife_user';
 
+// Set the auth header immediately on module load (before any component renders)
+const savedToken = localStorage.getItem(TOKEN_KEY);
+if (savedToken) {
+  axios.defaults.headers.common['Authorization'] = `Bearer ${savedToken}`;
+}
+
 export function AuthProvider({ children }) {
   const [user, setUser]   = useState(() => {
     try { return JSON.parse(localStorage.getItem(USER_KEY)); } catch { return null; }
   });
   const [token, setToken] = useState(() => localStorage.getItem(TOKEN_KEY) || null);
 
-  // Attach token to every axios request automatically
-  useEffect(() => {
-    if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    } else {
-      delete axios.defaults.headers.common['Authorization'];
-    }
-  }, [token]);
-
-  const login = (userData, jwt) => {
+  function _persist(userData, jwt) {
     setUser(userData);
     setToken(jwt);
     localStorage.setItem(USER_KEY,  JSON.stringify(userData));
     localStorage.setItem(TOKEN_KEY, jwt);
     axios.defaults.headers.common['Authorization'] = `Bearer ${jwt}`;
+  }
+
+  // login(email, password) — calls the backend
+  const login = async (email, password) => {
+    const { data } = await axios.post('/api/auth/login', { email, password });
+    _persist(data.user, data.token);
+  };
+
+  // signup(name, email, password, major, year) — calls the backend
+  const signup = async (name, email, password, major, year) => {
+    const { data } = await axios.post('/api/auth/signup', { name, email, password, major, year });
+    _persist(data.user, data.token);
   };
 
   const logout = () => {
@@ -38,7 +47,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
+    <AuthContext.Provider value={{ user, token, login, signup, logout }}>
       {children}
     </AuthContext.Provider>
   );

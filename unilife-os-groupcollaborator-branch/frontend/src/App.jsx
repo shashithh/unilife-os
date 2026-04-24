@@ -326,7 +326,7 @@ function CreateProject({ setView, setProject }) {
       const { data } = await axios.post(`${API}/ai/validate`, { name: form.name, description: form.description, deadline: form.deadline, memberCount: Math.max(members.length, 1) });
       if (!data.valid) { setError(data.reason); setLoading(false); return; }
       setValidation(data); setStep(2);
-    } catch { setError('Backend unreachable — is the server running?'); }
+    } catch (e) { setError(e.response?.data?.error || 'Request failed — check your connection or sign in again'); }
     setLoading(false);
   }
   async function step2() {
