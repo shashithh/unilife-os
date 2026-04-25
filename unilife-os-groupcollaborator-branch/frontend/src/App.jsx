@@ -327,7 +327,7 @@ function CreateProject({ setView, setProject }) {
       if (!data.valid) { setError(data.reason); setLoading(false); return; }
       setValidation(data); setStep(2);
     } catch (err) { 
-      setError(err.response?.data?.error || 'Backend unreachable — is the server running?'); 
+      setError(err.response?.data?.error || 'Request failed — check your connection or sign in again'); 
     }
     setLoading(false);
   }
