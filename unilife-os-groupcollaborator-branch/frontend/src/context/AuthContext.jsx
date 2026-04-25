@@ -21,12 +21,20 @@ export function AuthProvider({ children }) {
     }
   }, [token]);
 
-  const login = (userData, jwt) => {
-    setUser(userData);
-    setToken(jwt);
-    localStorage.setItem(USER_KEY,  JSON.stringify(userData));
-    localStorage.setItem(TOKEN_KEY, jwt);
-    axios.defaults.headers.common['Authorization'] = `Bearer ${jwt}`;
+  const login = async (email, password) => {
+    const { data } = await axios.post('/api/auth/login', { email, password });
+    setUser(data.user);
+    setToken(data.token);
+    localStorage.setItem(USER_KEY,  JSON.stringify(data.user));
+    localStorage.setItem(TOKEN_KEY, data.token);
+  };
+
+  const signup = async (name, email, password, major, year) => {
+    const { data } = await axios.post('/api/auth/signup', { name, email, password, major, year });
+    setUser(data.user);
+    setToken(data.token);
+    localStorage.setItem(USER_KEY,  JSON.stringify(data.user));
+    localStorage.setItem(TOKEN_KEY, data.token);
   };
 
   const logout = () => {
@@ -38,7 +46,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
+    <AuthContext.Provider value={{ user, token, login, signup, logout }}>
       {children}
     </AuthContext.Provider>
   );

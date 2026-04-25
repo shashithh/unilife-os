@@ -326,7 +326,9 @@ function CreateProject({ setView, setProject }) {
       const { data } = await axios.post(`${API}/ai/validate`, { name: form.name, description: form.description, deadline: form.deadline, memberCount: Math.max(members.length, 1) });
       if (!data.valid) { setError(data.reason); setLoading(false); return; }
       setValidation(data); setStep(2);
-    } catch { setError('Backend unreachable — is the server running?'); }
+    } catch (err) { 
+      setError(err.response?.data?.error || 'Backend unreachable — is the server running?'); 
+    }
     setLoading(false);
   }
   async function step2() {
@@ -339,7 +341,9 @@ function CreateProject({ setView, setProject }) {
         return { ...fn, assignedTo: match.name, assignedUserId: fn.assignedUserId || match.id };
       }));
       setStep(3);
-    } catch { setError('Failed to suggest functions'); }
+    } catch (err) { 
+      setError(err.response?.data?.error || 'Failed to suggest functions'); 
+    }
     setLoading(false);
   }
   async function step3() {
@@ -347,7 +351,9 @@ function CreateProject({ setView, setProject }) {
     try {
       const { data } = await axios.post(`${API}/ai/milestones`, { name: form.name, description: form.description, detectedType: validation.detectedType, deadline: form.deadline, assignedFunctions: assigned });
       setMilestones(data.milestones || []); setStep(4);
-    } catch { setError('Failed to generate milestones'); }
+    } catch (err) { 
+      setError(err.response?.data?.error || 'Failed to generate milestones'); 
+    }
     setLoading(false);
   }
   async function step4() {
@@ -355,7 +361,9 @@ function CreateProject({ setView, setProject }) {
     try {
       const { data } = await axios.post(`${API}/ai/dashboard`, { name: form.name, description: form.description, detectedType: validation.detectedType, deadline: form.deadline, members, assignedFunctions: assigned, milestones });
       setDashboard(data); setStep(5);
-    } catch { setError('Failed to seed dashboard'); }
+    } catch (err) { 
+      setError(err.response?.data?.error || 'Failed to seed dashboard'); 
+    }
     setLoading(false);
   }
   function finish() {
